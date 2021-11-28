@@ -1,0 +1,112 @@
+/*
+ *
+ * MMM-ESIOS-Indicator
+ *
+ * Enrique Cardona
+ * MIT Licensed.
+ *
+ * Custom here your css module
+ *
+ */
+
+
+ /*  Progress Bars https://catalin.red/stylish-css3-progress-bars/ */
+
+.MMM-ESIOS-Indicator {
+    width: 350px;
+    text-align: center;
+}
+
+.MMM-ESIOS-Indicator p.status {
+    margin: 0.1em 0;
+    padding: 0.1em 0;
+    line-height: 0.6em;
+    color: #aaa;
+    font-size: 0.6em;
+}
+
+.MMM-ESIOS-Indicator p .consuming {
+    color:rgb(255, 89, 89);
+}
+
+.MMM-ESIOS-Indicator p .inssuficient {
+    color:rgb(255, 238, 0);
+}
+
+.MMM-ESIOS-Indicator p .dumping {
+    color:rgb(58, 255, 58);
+}
+
+.MMM-ESIOS-Indicator p.label {
+     margin: 0.1em 0;
+     padding: 0.1em 0;
+     line-height: 0.6em;
+     color: #aaa;
+     font-size: 0.6em;
+ }
+
+
+/* FIXME Animation
+.MMM-ESIOS-Indicator .stripes span.animated {
+    animation: animate-stripes 3s linear infinite;             
+}
+*/ 
+
+.MMM-ESIOS-Indicator .stripes span.inverse {
+    background-size: 30px 30px;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                        transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                        transparent 75%, transparent);            
+}
+/* FIXME Animation
+
+.MMM-ESIOS-Indicator .stripes span.inverse.animated {
+    animation: animate-stripes-inverse 3s linear infinite;
+}
+*/
+
+.MMM-ESIOS-Indicator .icons { 
+    text-align: center
+}
+
+.MMM-ESIOS-Indicator .icons img {
+    width: 16%;
+    margin: 0 1%
+}
+
+.MMM-ESIOS-Indicator .icons div {
+    width: 16%;
+    margin: 0 1% 0.5em;
+    display: inline-block;
+}
+
+
+.MMM-ESIOS-Indicator .icons div .off {
+    background-color: rgb(0, 0, 0);
+    animation:none;
+}
+
+.MMM-ESIOS-Indicator .icons div .positive {
+    background-color: rgb(0, 173, 14);
+}
+
+.MMM-ESIOS-Indicator .icons div .negative {
+    background-color: rgb(255, 145, 0);
+}
+
+.semaphore{   
+    height:20px;
+    width:20px;
+    border-radius:10px;
+    border: 1px solid grey;
+    margin:20px; 
+  }
+  .go {
+    background-color:green;
+  }
+  .attention {
+    background-color:yellow;
+  }
+  .stop {
+    background-color:red;
+  }
