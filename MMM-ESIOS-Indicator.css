@@ -16,6 +16,7 @@
     width: 350px;
     text-align: center;
 }
+/*
 
 .MMM-ESIOS-Indicator p.status {
     margin: 0.1em 0;
@@ -44,26 +45,6 @@
      color: #aaa;
      font-size: 0.6em;
  }
-
-
-/* FIXME Animation
-.MMM-ESIOS-Indicator .stripes span.animated {
-    animation: animate-stripes 3s linear infinite;             
-}
-*/ 
-
-.MMM-ESIOS-Indicator .stripes span.inverse {
-    background-size: 30px 30px;
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
-                        transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
-                        transparent 75%, transparent);            
-}
-/* FIXME Animation
-
-.MMM-ESIOS-Indicator .stripes span.inverse.animated {
-    animation: animate-stripes-inverse 3s linear infinite;
-}
-*/
 
 .MMM-ESIOS-Indicator .icons { 
     text-align: center
@@ -109,4 +90,4 @@
   }
   .stop {
     background-color:red;
-  }
+  }*/

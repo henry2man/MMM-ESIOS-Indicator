@@ -7,31 +7,33 @@
  * MIT Licensed.
  */
 
-// Colors
-const limeToGreen = [
-  [212, 226, 132],
-  [0, 173, 14],
-];
-const yellowToRed = [
-  [255, 238, 82],
-  [173, 0, 14],
-];
-const blueToRed = [
-  [38, 0, 255],
-  [255, 0, 0],
-];
-const blueToPurple = [
-  [38, 0, 255],
-  [174, 0, 255],
-];
-
 Module.register("MMM-ESIOS-Indicator", {
+  // Colors
+  colors: {
+    limeToGreen: [
+      [212, 226, 132],
+      [0, 173, 14],
+    ],
+    yellowToRed: [
+      [255, 238, 82],
+      [173, 0, 14],
+    ],
+    blueToRed: [
+      [38, 0, 255],
+      [255, 0, 0],
+    ],
+    blueToPurple: [
+      [38, 0, 255],
+      [174, 0, 255],
+    ],
+  },
+
   defaults: {
     updateInterval: 300000,
     retryInterval: 5000,
-	headerHost: "api.esios.ree.es",
     apiEndpoint: "https://api.esios.ree.es/indicators",
     indicatorId: "1001",
+    geoId: "8741", // Peninsula
     token: "",
     debug: false,
     // FIXME animation
@@ -64,23 +66,22 @@ Module.register("MMM-ESIOS-Indicator", {
   getData: function () {
     var self = this;
 
-    var urlApi = self.config.apiEndpoint + "/" + indicatorId;
+    var urlApi = self.config.apiEndpoint + "/" + self.config.indicatorId;
     var retry = true;
 
     var dataRequest = new XMLHttpRequest();
 
-	dataRequest.setRequestHeader(
-		"Accept",
-		"application/json; application/vnd.esios-api-v2+json"
-	  );
-	  dataRequest.setRequestHeader("Content-Type", "application/json");
-	  dataRequest.setRequestHeader("Host", self.config.headerHost)
-	  dataRequest.setRequestHeader(
-		"Authorization",
-		"Token token='" + self.config.token + "'"
-	  );
-
     dataRequest.open("GET", urlApi, true);
+
+    dataRequest.setRequestHeader(
+      "Accept",
+      "application/json; application/vnd.esios-api-v2+json"
+    );
+    dataRequest.setRequestHeader("Content-Type", "application/json");
+    dataRequest.setRequestHeader(
+      "Authorization",
+      'Token token="' + self.config.token + '"'
+    );
 
     dataRequest.onreadystatechange = function () {
       if (this.readyState === 4) {
@@ -128,7 +129,8 @@ Module.register("MMM-ESIOS-Indicator", {
 
       // Use translate function
       //             this id defined in translations files
-      header.innerHTML = this.translate("TITLE") + this.dataRequest.short_name;
+      header.innerHTML =
+        this.translate("TITLE") + ": " + this.dataRequest.short_name;
 
       wrapper.appendChild(header);
 
@@ -139,42 +141,43 @@ Module.register("MMM-ESIOS-Indicator", {
       self.showMeter(
         wrapperMeters,
         "METER",
-        "Wh",
-        this.dataRequest.values[0].value,
-        self.config.powerRange[0],
-        self.config.powerRange[1],
-        limeToGreen,
+        "€/MWh",
+        this.dataRequest.values,
+        new Date().getHours(), 
+        50,
+        800,
         yellowToRed,
+        limeToGreen,
         "large",
         false
       );
 
-      if (true || this.dataRequest.Production_AC_Power_Net_WH > 0) {
-        self.showMeter(
-          wrapperMeters,
-          "PRODUCTION",
-          "Wh",
-          this.dataRequest.Production_AC_Power_Net_WH,
-          self.config.powerRange[0],
-          self.config.powerRange[1],
-          limeToGreen,
-          yellowToRed,
-          "normal",
-          true
-        );
-        self.showMeter(
-          wrapperMeters,
-          "CONSUMPTION",
-          "Wh",
-          this.dataRequest.Consumption_AC_Power_Net_WH,
-          self.config.powerRange[0],
-          self.config.powerRange[1],
-          limeToGreen,
-          yellowToRed,
-          "normal",
-          true
-        );
-      }
+      // if (true || this.dataRequest.Production_AC_Power_Net_WH > 0) {
+      //   self.showMeter(
+      //     wrapperMeters,
+      //     "PRODUCTION",
+      //     "Wh",
+      //     this.dataRequest.Production_AC_Power_Net_WH,
+      //     self.config.powerRange[0],
+      //     self.config.powerRange[1],
+      //     limeToGreen,
+      //     yellowToRed,
+      //     "normal",
+      //     true
+      //   );
+      //   self.showMeter(
+      //     wrapperMeters,
+      //     "CONSUMPTION",
+      //     "Wh",
+      //     this.dataRequest.Consumption_AC_Power_Net_WH,
+      //     self.config.powerRange[0],
+      //     self.config.powerRange[1],
+      //     limeToGreen,
+      //     yellowToRed,
+      //     "normal",
+      //     true
+      //   );
+      // }
 
       wrapper.appendChild(wrapperMeters);
 
@@ -299,7 +302,8 @@ Module.register("MMM-ESIOS-Indicator", {
     wrapper,
     element,
     unit,
-    data,
+    map,
+    index,
     minValue,
     maxValue,
     positiveColors,
@@ -307,6 +311,9 @@ Module.register("MMM-ESIOS-Indicator", {
     clazz,
     showTitle
   ) {
+
+    let data = map.get(index);
+
     var divMeters = document.createElement("div");
     divMeters.className = clazz + " bright";
 
@@ -366,7 +373,7 @@ Module.register("MMM-ESIOS-Indicator", {
     labelWrapper.style.color =
       "rgb(" + colorRed + ", " + colorGreen + ", " + colorBlue + ")";
     labelWrapper.innerHTML =
-      (showTitle ? this.translate(element) + ": " : "") + data + " " + unit;
+      (showTitle ? this.translate(element) + ": " : "") + data + " <span class='unit'>" + unit + "</span>";
 
     divMeters.appendChild(labelWrapper);
 
@@ -392,7 +399,17 @@ Module.register("MMM-ESIOS-Indicator", {
 
   processData: function (data) {
     var self = this;
-    this.dataRequest = data;
+    // Process data, filtering
+
+    this.dataRequest = {
+      indicator: data.indicator.short_name,
+      values: new Map(
+        data.indicator.values
+          .filter((v) => v.geo_id == self.config.geoId)
+          .map((v) => [new Date(v.datetime).getHours(), v.value])
+      ),
+    };
+
     if (this.loaded === false) {
       self.updateDom(self.config.animationSpeed);
     }
